@@ -74,7 +74,7 @@ def run_star_schema_load(target_ds: str):
                  ADD CONSTRAINT fact_order_items_pkey
                  PRIMARY KEY (order_id, order_item_id, payment_sequential, ds)'
             )
-        """)
+        """).fetchall()
 
     curated_s3_path = f"s3://{BUCKET_NAME}/curated/ds={target_ds}/orders.parquet"
 
