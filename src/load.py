@@ -2,17 +2,25 @@ import os
 import duckdb
 from dotenv import load_dotenv
 
-load_dotenv(override=True)
+load_dotenv()
 
-MINIO_ENDPOINT = os.getenv("MINIO_ENDPOINT")
+IN_DOCKER = os.path.exists("/.dockerenv")
+
+MINIO_ENDPOINT = os.getenv(
+    "MINIO_ENDPOINT_IN_DOCKER" if IN_DOCKER else "MINIO_ENDPOINT"
+)
 AWS_ACCESS_KEY_ID = os.getenv("MINIO_ROOT_USER")
 AWS_SECRET_ACCESS_KEY = os.getenv("MINIO_ROOT_PASSWORD")
 BUCKET_NAME = os.getenv("S3_BUCKET")
 
+PG_HOST = os.getenv(
+    "WAREHOUSE_HOST_IN_DOCKER" if IN_DOCKER else "WAREHOUSE_HOST"
+)
+PG_PORT =  os.getenv(
+    "WAREHOUSE_PORT_IN_DOCKER" if IN_DOCKER else "WAREHOUSE_PORT"
+)
 PG_USER = os.getenv("WAREHOUSE_USER")
 PG_PASSWORD = os.getenv("WAREHOUSE_PASSWORD")
-PG_HOST = os.getenv("WAREHOUSE_HOST")
-PG_PORT = os.getenv("WAREHOUSE_PORT")
 PG_DB = os.getenv("WAREHOUSE_DB")
 
 def run_star_schema_load(target_ds: str):

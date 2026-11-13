@@ -51,12 +51,13 @@ services:
     environment:
       AIRFLOW__CORE__EXECUTOR: SequentialExecutor
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
-      _PIP_ADDITIONAL_REQUIREMENTS: "duckdb boto3 psycopg2-binary pandas"
+      _PIP_ADDITIONAL_REQUIREMENTS: "duckdb boto3 psycopg2-binary pandas python-dotenv"
     volumes:
       - ./dags:/opt/airflow/dags
       - ./src:/opt/airflow/src
       - ./data:/opt/airflow/data
-    command: standalone
+      - ./sql:/opt/airflow/sql
+    command: bash -c "airflow db migrate && airflow users create --username admin --firstname Admin --lastname User --role Admin --email admin@example.com --password admin && airflow webserver"
     depends_on:
       - minio
       - warehouse-db
