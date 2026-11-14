@@ -1,8 +1,8 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
+import sys
+import pendulum
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-import sys
-import os
 
 # Ensure Airflow workers can import scripts from /opt/airflow/src
 sys.path.append('/opt/airflow/src')
@@ -20,9 +20,9 @@ default_args = {
 with DAG(
     dag_id='olist_star_schema_pipeline',
     default_args=default_args,
-    description='Idempotent daily Olist ETL pipeline into Star Schema',
-    schedule_interval='@daily',
-    start_date=datetime(2016, 9, 10),
+    description='Daily Olist ETL pipeline: land (MinIO) -> transform (DuckDB/Parquet) -> load (Star Schema)',
+    schedule='@daily',
+    start_date=pendulum.datetime(2017, 10, 2, tz='UTC'),
     catchup=False,
 ) as dag:
 

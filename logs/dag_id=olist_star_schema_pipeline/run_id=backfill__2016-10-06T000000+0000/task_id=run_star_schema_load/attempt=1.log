@@ -1,0 +1,22 @@
+[2026-11-14T12:30:26.594+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2026-11-14T12:30:26.630+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: olist_star_schema_pipeline.run_star_schema_load backfill__2016-10-06T00:00:00+00:00 [queued]>
+[2026-11-14T12:30:26.645+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: olist_star_schema_pipeline.run_star_schema_load backfill__2016-10-06T00:00:00+00:00 [queued]>
+[2026-11-14T12:30:26.647+0000] {taskinstance.py:2867} INFO - Starting attempt 1 of 4
+[2026-11-14T12:30:26.667+0000] {taskinstance.py:2890} INFO - Executing <Task(PythonOperator): run_star_schema_load> on 2016-10-06 00:00:00+00:00
+[2026-11-14T12:30:26.677+0000] {standard_task_runner.py:72} INFO - Started process 4126 to run task
+[2026-11-14T12:30:26.683+0000] {standard_task_runner.py:104} INFO - Running: ['airflow', 'tasks', 'run', 'olist_star_schema_pipeline', 'run_star_schema_load', 'backfill__2016-10-06T00:00:00+00:00', '--job-id', '128', '--pool', 'default_pool', '--raw', '--subdir', 'DAGS_FOLDER/olist_pipeline_dag.py', '--cfg-path', '/tmp/tmpzgsiiojz']
+[2026-11-14T12:30:26.689+0000] {standard_task_runner.py:105} INFO - Job 128: Subtask run_star_schema_load
+[2026-11-14T12:30:26.794+0000] {task_command.py:467} INFO - Running <TaskInstance: olist_star_schema_pipeline.run_star_schema_load backfill__2016-10-06T00:00:00+00:00 [running]> on host 097def87719b
+[2026-11-14T12:30:26.933+0000] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='data-engineer' AIRFLOW_CTX_DAG_ID='olist_star_schema_pipeline' AIRFLOW_CTX_TASK_ID='run_star_schema_load' AIRFLOW_CTX_EXECUTION_DATE='2016-10-06T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='backfill__2016-10-06T00:00:00+00:00'
+[2026-11-14T12:30:26.938+0000] {taskinstance.py:732} INFO - ::endgroup::
+[2026-11-14T12:30:26.962+0000] {logging_mixin.py:190} INFO - 📦 Starting Star Schema load for date: 2016-10-06 using native DuckDB
+[2026-11-14T12:30:27.206+0000] {logging_mixin.py:190} INFO - 🏗️ Executing DDL schema from sql/***_ddl.sql...
+[2026-11-14T12:30:27.295+0000] {logging_mixin.py:190} INFO - 👥 Upserting dim_customers, dim_products, dim_sellers...
+[2026-11-14T12:30:27.384+0000] {logging_mixin.py:190} INFO - 📊 Loading fact_order_items for ds=2016-10-06...
+[2026-11-14T12:30:27.407+0000] {logging_mixin.py:190} INFO - 🎉 Successfully loaded Star Schema for 2016-10-06 using native DuckDB compute!
+[2026-11-14T12:30:27.426+0000] {python.py:240} INFO - Done. Returned value was: None
+[2026-11-14T12:30:27.478+0000] {taskinstance.py:341} INFO - ::group::Post task execution logs
+[2026-11-14T12:30:27.481+0000] {taskinstance.py:353} INFO - Marking task as SUCCESS. dag_id=olist_star_schema_pipeline, task_id=run_star_schema_load, run_id=backfill__2016-10-06T00:00:00+00:00, execution_date=20161006T000000, start_date=20261114T123026, end_date=20261114T123027
+[2026-11-14T12:30:27.554+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2026-11-14T12:30:27.587+0000] {taskinstance.py:3901} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2026-11-14T12:30:27.592+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
