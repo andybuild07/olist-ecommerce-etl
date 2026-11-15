@@ -1,13 +1,37 @@
 # Olist Star Schema ETL Pipeline
 
 [![CI](https://github.com/andybuild07/olist-ecommerce-etl/actions/workflows/ci.yml/badge.svg)](https://github.com/andybuild07/olist-ecommerce-etl/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Apache Airflow](https://img.shields.io/badge/Apache%20Airflow-017CEE?style=for-the-badge&logo=apacheairflow&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![MinIO (Local S3)](https://img.shields.io/badge/MinIO%20(Local%20S3)-C72E49?style=for-the-badge&logo=minio&logoColor=white)
+![Metabase](https://img.shields.io/badge/Metabase-509EE3?style=for-the-badge&logo=metabase&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Pytest](https://img.shields.io/badge/Pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
 
-End-to-end data engineering project built around the Olist e-commerce dataset using a containerized stack of **Apache Airflow**, **MinIO**, **PostgreSQL**, and **Metabase**, automated with a `Makefile`, and backed by testing and CI/CD via **GitHub Actions**.
+End-to-end data engineering project built around the Olist e-commerce dataset using a containerized stack of **Apache Airflow**, **MinIO (Local S3)**, **PostgreSQL**, and **Metabase**, automated with a `Makefile`, and backed by automated testing and CI/CD via **GitHub Actions**.
+
+## Quick Navigation
+
+* [Architecture & Design Highlights](#architecture--design-highlights)
+* [Pipeline & Dashboard Walkthrough](#pipeline--dashboard-walkthrough)
+  * [Airflow UI](#airflow-ui)
+  * [MinIO UI (Local S3)](#minio-ui-local-s3)
+  * [Metabase UI](#metabase-ui)
+* [Project Structure](#project-structure)
+* [How to Run the Project](#how-to-run-the-project)
+  * [1. Clone the Repository and Create `.env`](#1-clone-the-repository-and-create-env)
+  * [2. Manage Services via `Makefile`](#2-manage-services-via-makefile)
+  * [3. Upload Raw Data to MinIO (Manual Ingestion)](#3-upload-raw-data-to-minio-manual-ingestion)
+  * [4. Unpause and Backfill the Pipeline via Terminal](#4-unpause-and-backfill-the-pipeline-via-terminal)
+  * [5. Explore Analytics in Metabase](#5-explore-analytics-in-metabase)
+  * [6. Run Tests](#6-run-tests)
 
 ## Architecture & Design Highlights
 
 ```text
-Manual Raw Upload ──▶ MinIO (Landing / Object Storage)
+Manual Raw Upload ──▶ MinIO (Local S3 / Landing Storage)
                          │
                          ▼
                Apache Airflow (`olist_star_schema_pipeline`, `@daily`, `catchup=False`)
@@ -21,7 +45,7 @@ Manual Raw Upload ──▶ MinIO (Landing / Object Storage)
                Metabase (Analytics & Dashboards)
 ```
 
-* **Manual Landing + Automated Processing:** Raw Olist dataset files are uploaded manually to the MinIO landing bucket, after which Airflow orchestrates curated transformations and warehouse loads into PostgreSQL.
+* **Manual Landing + Automated Processing:** Raw Olist dataset files are uploaded manually to the MinIO (Local S3) landing bucket, after which Airflow orchestrates curated transformations and warehouse loads into PostgreSQL.
 * **Logical-Date (`ds`) Driven:** Tasks receive `context['ds']` from Airflow so daily partitions and backfills are deterministic and isolated by logical date rather than relying on wall-clock functions (`now()`, `date.today()`, or `CURRENT_DATE`).
 * **`catchup=False` + On-Demand Backfills:** Prevents flooding historical runs when unpausing the DAG while still supporting targeted historical backfills for specific dates via the CLI.
 * **Idempotent Loads:** Designed so re-running a partition for a given `ds` (such as `DELETE`/`INSERT` by `ds` and `ON CONFLICT` upserts) safely updates data without duplicating records.
@@ -31,15 +55,15 @@ Manual Raw Upload ──▶ MinIO (Landing / Object Storage)
 
 ### Airflow UI
 
-![Airflow DAG Runs](./docs/screenshots/airflow-ui.png)
+![Airflow DAG Execution UI](./docs/screenshots/airflow-ui.png)
 
-### MinIO UI
+### MinIO UI (Local S3)
 
-![MinIO Object Storage](./docs/screenshots/minio-ui.png)
+![MinIO Object Storage Landing UI](./docs/screenshots/minio-ui.png)
 
 ### Metabase UI
 
-![Metabase Analytics Dashboard](./docs/screenshots/metabase-ui.png)
+![Metabase Star Schema Analytics Dashboard](./docs/screenshots/metabase-ui.png)
 
 ## Project Structure
 
@@ -117,7 +141,7 @@ make nuke
 
 ### 3. Upload Raw Data to MinIO (Manual Ingestion)
 
-Raw ingestion is performed manually before running or backfilling the pipeline:
+Raw ingestion into MinIO (Local S3) is performed manually before running or backfilling the pipeline:
 
 1. Open the **MinIO Console** on the port configured in your `.env` / `docker-compose.yml`.
 2. Ensure the landing bucket exists and upload the raw Olist CSV files into the expected landing path.
