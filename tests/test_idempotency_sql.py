@@ -29,7 +29,6 @@ def _load_sample_slice(cur, target_ds: str):
             customer_state = EXCLUDED.customer_state;
         """,
         ("cust_1", "ucust_1", "01000", "sao paulo", "SP"),
-        ("cust_1", "ucust_1", "01000", "sao paulo", "SP"),
     )
 
     cur.execute(
@@ -43,7 +42,6 @@ def _load_sample_slice(cur, target_ds: str):
             product_category_name = EXCLUDED.product_category_name;
         """,
         ("prod_1", "beleza_saude", 40, 200, 2, 500, 20, 10, 15),
-        ("prod_1", "beleza_saude", 40, 200, 2, 500, 20, 10, 15),
     )
 
     cur.execute(
@@ -56,7 +54,6 @@ def _load_sample_slice(cur, target_ds: str):
             seller_city = EXCLUDED.seller_city,
             seller_state = EXCLUDED.seller_state;
         """,
-        ("sell_1", "02000", "curitiba", "PR"),
         ("sell_1", "02000", "curitiba", "PR"),
     )
 
